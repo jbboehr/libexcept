@@ -1,0 +1,70 @@
+
+# to ignore binaries... scary
+#*
+#!*.*
+
+# specific
+doc/Doxyfile
+doc/html
+doc/man
+handlebars_c_test.info
+src/handlebars_config.h
+src/handlebars.lex.*
+src/handlebars.tab.*
+test_coverage
+
+# hackey rules
+bin/handlebarsc
+tests/test
+tests/test_*
+!tests/test_*.c
+
+# ignores by extension
+*~
+*.o
+*.a
+*.lo
+*.la
+*.log
+*.pyc
+*.pc
+*.exe
+*.gcov
+*.gcda
+*.gcno
+*.stamp
+*.stackdump
+*.trs
+*.c.*r.*
+
+# autotools
+.autotools
+.libs
+.deps
+.dirstamp
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+confdefs.h
+config.h
+config.h.in
+config.log
+config.status
+configure
+libtool
+stamp-h1
+
+# distros
+*.tar.gz
+*.tgz
+*.tar
+*.zip
+
+# eclipse
+.cproject
+.project
+.settings
+
+# cloud9
+.c9
