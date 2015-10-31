@@ -86,6 +86,20 @@ START_TEST(test_finally)
 }
 END_TEST
 
+START_TEST(test_finally_only)
+{
+   int finally_ran = 0;
+   TRY {
+      THROW( BAR_EXCEPTION );
+      ck_assert(0);
+   } FINALLY {
+   	finally_ran = 1;
+   } ETRY;
+
+   ck_assert(finally_ran);
+}
+END_TEST
+
 START_TEST(test_nested)
 {
 	volatile int finally_ran = 0;
@@ -96,18 +110,14 @@ START_TEST(test_nested)
 			ck_assert(0);
 		} CATCH( FOO_EXCEPTION ) {
 			catch_ran++;
-fprintf(stderr, "%s:%d %d\n", __FILE__, __LINE__, catch_ran);
 			THROW( FOO_EXCEPTION );
 			ck_assert(0);
 		} FINALLY {
-fprintf(stderr, "%s:%d %d\n", __FILE__, __LINE__, catch_ran);
 			finally_ran++;
 		} ETRY;
 	} CATCH( FOO_EXCEPTION ) {
 		catch_ran++;
-fprintf(stderr, "%s:%d %d\n", __FILE__, __LINE__, catch_ran);
 	} FINALLY {
-fprintf(stderr, "%s:%d %d\n", __FILE__, __LINE__, catch_ran);
 		finally_ran++;
 	} ETRY;
 	ck_assert_int_eq(catch_ran, 2);
@@ -124,6 +134,7 @@ Suite * parser_suite(void)
     REGISTER_TEST(s, test_without_throw, "Without throw");
     REGISTER_TEST(s, test_multi, "Multi");
     REGISTER_TEST(s, test_finally, "Finally");
+    REGISTER_TEST(s, test_finally_only, "Finally Only");
     REGISTER_TEST(s, test_nested, "Nested");
 
     return s;
