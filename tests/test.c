@@ -13,6 +13,12 @@
 	tcase_add_test(tc_ ## name, name); \
 	suite_add_tcase(s, tc_ ## name);
 
+
+#define REGISTER_SIGNAL_TEST(s, name, title, signal) \
+	TCase * tc_ ## name = tcase_create(title); \
+	tcase_add_test_raise_signal(tc_ ## name, name, signal); \
+	suite_add_tcase(s, tc_ ## name);
+
 #define FOO_EXCEPTION (1)
 #define BAR_EXCEPTION (2)
 #define BAZ_EXCEPTION (3)
@@ -125,6 +131,12 @@ START_TEST(test_nested)
 }
 END_TEST
 
+START_TEST(test_uncaught)
+{
+	THROW( FOO_EXCEPTION );
+}
+END_TEST
+
 
 Suite * parser_suite(void)
 {
@@ -136,6 +148,7 @@ Suite * parser_suite(void)
     REGISTER_TEST(s, test_finally, "Finally");
     REGISTER_TEST(s, test_finally_only, "Finally Only");
     REGISTER_TEST(s, test_nested, "Nested");
+    REGISTER_SIGNAL_TEST(s, test_uncaught, "Uncaught", 6);
 
     return s;
 }

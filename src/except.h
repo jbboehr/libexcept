@@ -16,18 +16,22 @@
 				except_in(NULL); \
 			break; \
 			case x: \
+				ex_frame__->d = 1; \
 				except_in(ex_frame__); \
 
 #define FINALLY \
 				except_in(NULL); \
 			break; \
-	} \
-	switch(0) { \
-			default:
+		} \
+		switch( ex_frame__->r ) { \
+			case XFINALLY: \
+			default: \
+				ex_frame__->d = 1;
 
 #define ETRY \
 			break; \
 		} \
+		except_frame_pop(); \
 		if( ex_frame__->x ) { \
 			except_in(NULL); \
 			THROW(ex_frame__->x); \
@@ -35,24 +39,23 @@
 	} while(0) \
 
 #define THROW(z) \
-	except_throw(z); \
-	if( ex_frame__->x ) { \
-		break; \
-	}
+	except_throw(z, "" #z  "")
+
+#define XFINALLY -1
 
 struct except_frame {
 	jmp_buf buf;
 	int x;
 	short r;
 	short c;
+	short d;
 };
 
 struct except_frame * except_frame_ctor();
 struct except_frame * except_frame_top();
 struct except_frame * except_frame_pop();
-struct except_frame * except_frame_pop_if_top(struct except_frame * frame);
 void except_in(struct except_frame * frame);
-void except_throw(int x);
+void except_throw(int x, const char * s);
 
 #endif /* EXCEPT_H */
 
